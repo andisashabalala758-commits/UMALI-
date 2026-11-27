@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safelight Day Care | A Place to Learn and Grow</title>
+<meta name="description" content="A welcoming early childhood learning environment where children can explore, learn, play, and grow.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     EDIT ME — School details (all public-facing info lives here)
+     ============================================================ */
+  :root {
+    --school-name: "Safelight Day Care";
+    --school-address: "Your Street Address, Your Town, South Africa";
+    --school-phone-display: "000 000 0000";
+    --school-phone-link: "+27000000000";
+    --school-whatsapp: "27000000000";              /* international format, no + or spaces */
+    --school-email: "hello@safelightdaycare.co.za";
+    --school-hours-week: "Monday – Friday: 07:00 – 17:30";
+    --school-hours-note: "Please contact us about aftercare options.";
+    --maps-embed-src: "";                           /* paste a Google Maps embed URL here */
+    --maps-link: "https://www.google.com/maps/search/?api=1&query=Safelight+Day+Care";
+
+    /* Colours */
+    --forest: #1e4632;
+    --forest-deep: #143022;
+    --sage: #8fae8b;
+    --sage-soft: #e6eee2;
+    --cream: #faf6ee;
+    --cream-deep: #f2ecdd;
+    --gold: #e9b44c;
+    --gold-soft: #f7e3b8;
+    --ink: #2b2f2a;
+    --ink-soft: #5a615a;
+    --white: #ffffff;
+    --radius-lg: 28px;
+    --radius-md: 18px;
+    --shadow-soft: 0 18px 45px rgba(20, 48, 34, 0.12);
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "DM Sans", system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .wordmark { font-family: "Playfair Display", Georgia, serif; line-height: 1.15; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  .wrap { width: min(1120px, 92%); margin: 0 auto; }
+
+  section { padding: clamp(64px, 9vw, 110px) 0; }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--forest);
+  }
+  .kicker::before { content: ""; width: 26px; height: 2px; background: var(--gold); border-radius: 2px; }
+
+  .section-title { font-size: clamp(1.9rem, 4.4vw, 2.9rem); color: var(--forest-deep); margin-top: 14px; font-weight: 600; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 15px 28px; border-radius: 999px; border: none; cursor: pointer;
+    font-family: "DM Sans", sans-serif; font-size: 1rem; font-weight: 600;
+    text-decoration: none; transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  .btn-forest { background: var(--forest); color: var(--cream); box-shadow: 0 10px 24px rgba(20, 48, 34, 0.28); }
+  .btn-forest:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(20, 48, 34, 0.34); }
+  .btn-gold { background: var(--gold); color: var(--forest-deep); box-shadow: 0 10px 24px rgba(233, 180, 76, 0.35); }
+  .btn-gold:hover { transform: translateY(-3px); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .link-quiet {
+    color: var(--cream); font-weight: 600; text-decoration: none;
+    border-bottom: 1px solid rgba(250, 246, 238, 0.5); padding-bottom: 2px;
+    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .link-quiet:hover { border-color: var(--gold); color: var(--gold); }
+
+  :is(a, button, input, textarea):focus-visible {
+    outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 6px;
+  }
+
+  /* ---------- Loader ---------- */
+  #loader {
+    position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+    background: var(--forest); transition: opacity 0.6s var(--ease), visibility 0.6s;
+  }
+  #loader.done { opacity: 0; visibility: hidden; }
+  .loader-mark { display: grid; place-items: center; gap: 16px; color: var(--cream); }
+  .loader-leaf { width: 54px; height: 54px; animation: pulse 1.6s ease-in-out infinite; }
+  .loader-leaf path { fill: var(--gold); }
+  .loader-word { font-family: "Playfair Display", serif; font-size: 1.15rem; letter-spacing: 0.06em; opacity: 0.9; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.75; } 50% { transform: scale(1.14); opacity: 1; } }
+
+  /* ---------- Header ---------- */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    padding: 18px 0; transition: background 0.35s var(--ease), box-shadow 0.35s var(--ease), padding 0.35s var(--ease);
+  }
+  header.scrolled {
+    background: rgba(250, 246, 238, 0.96); box-shadow: 0 6px 24px rgba(20, 48, 34, 0.1);
+    padding: 10px 0; backdrop-filter: blur(8px);
+  }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
+  .brand-leaf { width: 30px; height: 30px; flex: none; transition: transform 0.35s var(--ease); }
+  .brand:hover .brand-leaf { transform: rotate(-8deg) scale(1.06); }
+  .brand-leaf path { fill: var(--gold); }
+  .brand-leaf .leaf-vein { stroke: var(--forest); }
+  .wordmark { font-size: 1.28rem; font-weight: 600; color: var(--cream); transition: color 0.35s var(--ease); }
+  header.scrolled .wordmark { color: var(--forest-deep); }
+  header.scrolled .brand-leaf .leaf-vein { stroke: var(--cream); }
+
+  nav.desktop { display: flex; align-items: center; gap: 26px; }
+  nav.desktop a.nav-link {
+    color: var(--cream); text-decoration: none; font-weight: 500; font-size: 0.97rem;
+    position: relative; transition: color 0.35s var(--ease);
+  }
+  nav.desktop a.nav-link::after {
+    content: ""; position: absolute; left: 0; bottom: -6px; height: 2px; width: 0;
+    background: var(--gold); border-radius: 2px; transition: width 0.3s var(--ease);
+  }
+  nav.desktop a.nav-link:hover::after, nav.desktop a.nav-link.active::after { width: 100%; }
+  header.scrolled nav.desktop a.nav-link { color: var(--forest-deep); }
+  .nav-cta { padding: 11px 22px; font-size: 0.93rem; }
+
+  .burger {
+    display: none; background: none; border: none; cursor: pointer; padding: 8px; z-index: 60;
+  }
+  .burger span { display: block; width: 24px; height: 2px; background: var(--cream); margin: 5px 0; border-radius: 2px; transition: transform 0.3s var(--ease), opacity 0.3s, background 0.35s var(--ease); }
+  header.scrolled .burger span { background: var(--forest-deep); }
+  .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 55; background: var(--forest);
+    display: grid; place-items: center; text-align: center;
+    opacity: 0; visibility: hidden; transition: opacity 0.35s var(--ease), visibility 0.35s;
+  }
+  .mobile-menu.open { opacity: 1; visibility: visible; }
+  .mobile-menu nav { display: grid; gap: 26px; }
+  .mobile-menu a { color: var(--cream); text-decoration: none; font-family: "Playfair Display", serif; font-size: 1.7rem; }
+  .mobile-menu a:hover { color: var(--gold); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; min-height: 100svh; display: grid; place-items: center;
+    text-align: center; overflow: hidden; padding: 120px 0 80px;
+  }
+  .hero-bg {
+    position: absolute; inset: -8% 0; z-index: -2;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(233, 180, 76, 0.35), transparent 55%),
+      radial-gradient(ellipse at 80% 85%, rgba(143, 174, 139, 0.5), transparent 60%),
+      linear-gradient(160deg, #2c5c42 0%, #1e4632 45%, #143022 100%);
+    will-change: transform;
+  }
+  .hero-bg::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 12% 30%, rgba(250, 246, 238, 0.08) 0 3px, transparent 4px),
+      radial-gradient(circle at 88% 20%, rgba(250, 246, 238, 0.07) 0 2px, transparent 3px),
+      radial-gradient(circle at 70% 75%, rgba(250, 246, 238, 0.06) 0 3px, transparent 4px);
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(rgba(16, 36, 26, 0.35), rgba(16, 36, 26, 0.15) 45%, rgba(250, 246, 238, 0.95) 100%);
+  }
+  .hero-inner { width: min(860px, 92%); margin: 0 auto; }
+  .hero-kicker {
+    display: inline-flex; align-items: center; gap: 10px; padding: 9px 20px;
+    border-radius: 999px; background: rgba(250, 246, 238, 0.14); border: 1px solid rgba(250, 246, 238, 0.3);
+    color: var(--cream); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    backdrop-filter: blur(4px);
+  }
+  .hero h1 {
+    color: var(--cream); font-size: clamp(2.5rem, 7.2vw, 5rem); font-weight: 600;
+    margin: 26px 0 18px; text-wrap: balance; text-shadow: 0 4px 30px rgba(10, 26, 18, 0.45);
+  }
+  .hero p.lede {
+    color: rgba(250, 246, 238, 0.92); font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    max-width: 560px; margin: 0 auto 36px;
+  }
+  .hero-actions { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+
+  .fade-up { opacity: 0; transform: translateY(28px); animation: fadeUp 0.9s var(--ease) forwards; }
+  .d1 { animation-delay: 0.1s; } .d2 { animation-delay: 0.28s; } .d3 { animation-delay: 0.46s; } .d4 { animation-delay: 0.64s; }
+  @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- About ---------- */
+  .about-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .about-copy p { color: var(--ink-soft); margin-top: 18px; font-size: 1.05rem; }
+  .about-points { display: grid; gap: 14px; margin-top: 28px; }
+  .about-points li { list-style: none; display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-weight: 500; }
+  .about-points svg { width: 22px; height: 22px; flex: none; margin-top: 2px; }
+  .about-points .dot { fill: var(--sage); }
+  .about-points .tick { stroke: var(--forest); }
+
+  .photo-frame {
+    position: relative; border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: var(--shadow-soft); aspect-ratio: 4 / 3.4;
+  }
+  .photo-frame .scene { position: absolute; inset: 0; }
+  .photo-caption {
+    position: absolute; left: 16px; bottom: 16px; right: 16px;
+    background: rgba(250, 246, 238, 0.92); border-radius: 14px; padding: 10px 16px;
+    font-size: 0.86rem; font-weight: 600; color: var(--forest-deep); backdrop-filter: blur(4px);
+  }
+
+  /* Illustrated placeholder scenes (replace with real photos later) */
+  .scene { display: grid; }
+  .scene svg { width: 100%; height: 100%; }
+  .scene-1 { background: linear-gradient(180deg, #dcebd4 0%, #f2ecdd 100%); }
+  .scene-2 { background: linear-gradient(180deg, #f7e3b8 0%, #e6eee2 100%); }
+  .scene-3 { background: linear-gradient(180deg, #e6eee2 0%, #dcebd4 100%); }
+  .scene-4 { background: linear-gradient(180deg, #fdeecb 0%, #f2ecdd 100%); }
+  .scene-5 { background: linear-gradient(180deg, #d8e8cf 0%, #f7e3b8 100%); }
+  .scene-6 { background: linear-gradient(180deg, #efe6cf 0%, #dcebd4 100%); }
+  .scene-7 { background: linear-gradient(180deg, #f2ecdd 0%, #e6eee2 100%); }
+  .scene-8 { background: linear-gradient(180deg, #e4f0db 0%, #fdeecb 100%); }
+
+  /* ---------- Programmes ---------- */
+  .programmes { background: var(--white); border-radius: clamp(28px, 4vw, 48px); width: min(1240px, 96%); margin: 0 auto; }
+  .prog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 48px; }
+  .prog-card {
+    background: var(--sage-soft); border-radius: var(--radius-lg); padding: 34px 28px;
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.35s var(--ease);
+  }
+  .prog-card:nth-child(2) { background: var(--gold-soft); }
+  .prog-card:nth-child(3) { background: var(--cream-deep); }
+  .prog-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-soft); }
+  .prog-icon {
+    width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center;
+    background: var(--white); box-shadow: 0 8px 18px rgba(20, 48, 34, 0.1); margin-bottom: 20px;
+  }
+  .prog-icon svg { width: 28px; height: 28px; }
+  .prog-icon .a { fill: none; stroke: var(--forest); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .prog-icon .b { fill: var(--gold); }
+  .prog-card h3 { font-size: 1.35rem; color: var(--forest-deep); margin-bottom: 14px; }
+  .prog-card ul { list-style: none; display: grid; gap: 9px; }
+  .prog-card li { display: flex; gap: 9px; align-items: flex-start; color: var(--ink-soft); font-size: 0.97rem; }
+  .prog-card li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-top: 8px; flex: none; }
+
+  /* ---------- Environment ---------- */
+  .env-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(32px, 6vw, 72px); align-items: center; }
+  .env-copy p { color: var(--ink-soft); margin-top: 18px; font-size: 1.05rem; }
+
+  /* ---------- Gallery ---------- */
+  .gallery-band { background: var(--forest); border-radius: clamp(28px, 4vw, 48px); width: min(1240px, 96%); margin: 0 auto; }
+  .gallery-band .kicker { color: var(--gold-soft); }
+  .gallery-band .section-title { color: var(--cream); }
+  .gal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 44px; }
+  .gal-item {
+    border-radius: var(--radius-md); overflow: hidden; position: relative; aspect-ratio: 1;
+    cursor: default;
+  }
+  .gal-item.tall { grid-row: span 2; aspect-ratio: auto; }
+  .gal-item .scene { position: absolute; inset: 0; transition: transform 0.6s var(--ease); }
+  .gal-item:hover .scene { transform: scale(1.06); }
+  .gal-item .gal-label {
+    position: absolute; inset: auto 0 0 0; padding: 30px 16px 14px;
+    background: linear-gradient(transparent, rgba(16, 36, 26, 0.75));
+    color: var(--cream); font-size: 0.86rem; font-weight: 600;
+  }
+
+  /* ---------- Why parents choose us ---------- */
+  .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 48px; }
+  .why-card {
+    background: var(--white); border: 1px solid rgba(20, 48, 34, 0.08); border-radius: var(--radius-md);
+    padding: 28px 24px; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  }
+  .why-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+  .why-num { font-family: "Playfair Display", serif; font-size: 1.6rem; color: var(--gold); font-weight: 700; }
+  .why-card h3 { font-size: 1.08rem; color: var(--forest-deep); margin: 10px 0 8px; font-family: "DM Sans", sans-serif; font-weight: 700; }
+  .why-card p { font-size: 0.93rem; color: var(--ink-soft); }
+
+  /* ---------- Contact ---------- */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 64px); align-items: start; }
+  .contact-card {
+    background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-soft);
+    padding: clamp(28px, 4vw, 44px); display: grid; gap: 22px;
+  }
+  .contact-line { display: flex; gap: 16px; align-items: flex-start; }
+  .contact-line .ico {
+    width: 44px; height: 44px; border-radius: 14px; background: var(--sage-soft);
+    display: grid; place-items: center; flex: none;
+  }
+  .contact-line .ico svg { width: 20px; height: 20px; }
+  .contact-line .ico .a { fill: none; stroke: var(--forest); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .contact-line .ico .wa { fill: var(--forest); }
+  .contact-line h3 { font-family: "DM Sans", sans-serif; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
+  .contact-line p, .contact-line a { color: var(--ink); font-weight: 500; text-decoration: none; font-size: 1.02rem; margin-top: 3px; }
+  .contact-line a:hover { color: var(--forest); text-decoration: underline; }
+  .contact-cta { display: grid; gap: 14px; margin-top: 6px; }
+  .contact-cta .btn { justify-content: center; }
+  .wa-btn { background: #1faa53; color: var(--white); box-shadow: 0 10px 24px rgba(31, 170, 83, 0.32); }
+  .wa-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(31, 170, 83, 0.4); }
+  .maps {
+    border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft);
+    background: var(--sage-soft); min-height: 320px; position: relative;
+  }
+  .maps iframe { width: 100%; height: 100%; min-height: 380px; border: 0; display: block; }
+  .maps .maps-empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 30px; color: var(--forest-deep); font-weight: 500; }
+  .maps .maps-empty a { color: var(--forest); font-weight: 700; }
+
+  /* ---------- Footer ---------- */
+  footer { background: var(--forest-deep); color: rgba(250, 246, 238, 0.85); padding: 44px 0 34px; margin-top: 40px; }
+  .foot-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .foot-row .wordmark { color: var(--cream); font-size: 1.1rem; }
+  .foot-row small { font-size: 0.86rem; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 820px) {
+    nav.desktop { display: none; }
+    .burger { display: block; }
+    header { padding: 12px 0; }
+    .about-grid, .env-grid, .contact-grid { grid-template-columns: 1fr; }
+    .prog-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .gal-grid { grid-template-columns: 1fr 1fr; }
+    .gal-item.tall { grid-row: auto; aspect-ratio: 1; }
+    .hero-actions .btn { width: min(340px, 100%); justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    .why-grid { grid-template-columns: 1fr; }
+    .wordmark { font-size: 1.1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+    .fade-up { opacity: 1; transform: none; }
+  }
+</style>
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader" role="status" aria-label="Loading Safelight Day Care website">
+  <div class="loader-mark">
+    <svg class="loader-leaf" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2C7 6 4 10 4 14a8 8 0 0 0 16 0c0-4-3-8-8-12z"/>
+    </svg>
+    <span class="loader-word">Safelight Day Care</span>
+  </div>
+</div>
+
+<!-- Header -->
+<header id="header">
+  <div class="wrap nav-row">
+    <a class="brand" href="#home" aria-label="Safelight Day Care — home">
+      <svg class="brand-leaf" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2C7 6 4 10 4 14a8 8 0 0 0 16 0c0-4-3-8-8-12z"/>
+        <path class="leaf-vein" d="M12 5v14" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span class="wordmark">Safelight Day Care</span>
+    </a>
+    <nav class="desktop" aria-label="Main navigation">
+      <a class="nav-link active" href="#home">Home</a>
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#programmes">Programmes</a>
+      <a class="nav-link" href="#gallery">Gallery</a>
+      <a class="nav-link" href="#contact">Contact</a>
+      <a class="btn btn-gold nav-cta" href="#contact">Enquire Now</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <nav aria-label="Mobile navigation">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#programmes">Programmes</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</div>
+
+<main>
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <span class="hero-kicker fade-up d1">Safelight Day Care</span>
+      <h1 class="fade-up d2">A place to learn, play and&nbsp;grow.</h1>
+      <p class="lede fade-up d3">Helping little minds grow through learning, discovery and play.</p>
+      <div class="hero-actions fade-up d4">
+        <a class="btn btn-forest" id="heroWhatsapp" href="#contact">
+          Book a Visit
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="link-quiet" href="#about">Discover Our Creche</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="wrap about-grid">
+      <div class="about-copy reveal">
+        <span class="kicker">About Us</span>
+        <h2 class="section-title" id="about-title">Growing Together, Every Day.</h2>
+        <p>Safelight Day Care is a welcoming early childhood learning environment where children can explore, learn, play and grow. Every day is filled with gentle routines, hands-on discovery and the joy of small achievements.</p>
+        <p>We believe young children learn best through play. Our days are shaped to help each child develop confidence, build friendships and discover the world at their own pace, with caring guidance every step of the way.</p>
+        <ul class="about-points">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="10"/><path class="tick" d="m8.5 12.5 2.5 2.5 5-6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            A warm, nurturing space for young children
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="10"/><path class="tick" d="m8.5 12.5 2.5 2.5 5-6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Learning through play, every single day
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="10"/><path class="tick" d="m8.5 12.5 2.5 2.5 5-6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Caring guidance that builds confidence
+          </li>
+        </ul>
+      </div>
+      <div class="photo-frame reveal" role="img" aria-label="Illustration of a bright classroom with a reading corner and plants">
+        <div class="scene scene-1" aria-hidden="true">
+          <svg viewBox="0 0 400 340" preserveAspectRatio="xMidYMid slice">
+            <rect x="0" y="0" width="400" height="340" fill="#f2ecdd"/>
+            <circle cx="330" cy="60" r="46" fill="#f7d98c"/>
+            <rect x="40" y="90" width="150" height="110" rx="10" fill="#ffffff"/>
+            <rect x="52" y="102" width="126" height="10" rx="5" fill="#8fae8b"/>
+            <rect x="52" y="122" width="100" height="10" rx="5" fill="#e0d6bd"/>
+            <rect x="52" y="142" width="114" height="10" rx="5" fill="#e0d6bd"/>
+            <rect x="52" y="168" width="60" height="14" rx="7" fill="#e9b44c"/>
+            <rect x="40" y="220" width="320" height="90" rx="14" fill="#8fae8b" opacity="0.35"/>
+            <rect x="60" y="240" width="90" height="60" rx="10" fill="#1e4632" opacity="0.75"/>
+            <circle cx="210" cy="270" r="24" fill="#e9b44c"/>
+            <circle cx="260" cy="275" r="18" fill="#c96f4a"/>
+            <circle cx="300" cy="268" r="21" fill="#8fae8b"/>
+            <path d="M120 320c10-40 30-60 45-68" stroke="#5f8a5a" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="170" cy="242" rx="26" ry="34" fill="#5f8a5a"/>
+          </svg>
+        </div>
+        <span class="photo-caption">Bright, welcoming spaces made for little learners</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programmes -->
+  <section id="programmes" aria-labelledby="prog-title">
+    <div class="programmes">
+      <div class="wrap">
+        <div class="reveal">
+          <span class="kicker">Our Programmes</span>
+          <h2 class="section-title" id="prog-title">Learning Made Joyful.</h2>
+        </div>
+        <div class="prog-grid">
+          <article class="prog-card reveal" style="transition-delay:0s">
+            <div class="prog-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path class="a" d="M12 3 2 8l10 5 10-5-10-5z"/><path class="a" d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/><circle class="b" cx="20" cy="17" r="2.4"/></svg>
+            </div>
+            <h3>Early Learning</h3>
+            <ul>
+              <li>Learning through play</li>
+              <li>Early literacy and numeracy</li>
+              <li>Creative activities</li>
+            </ul>
+          </article>
+          <article class="prog-card reveal" style="transition-delay:0.12s">
+            <div class="prog-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path class="a" d="M9 18V6l10-2v11"/><circle class="a" cx="6.5" cy="18" r="2.5"/><circle class="a" cx="16.5" cy="15" r="2.5"/><circle class="b" cx="20" cy="5" r="1.6"/></svg>
+            </div>
+            <h3>Creative Discovery</h3>
+            <ul>
+              <li>Arts and crafts</li>
+              <li>Music and movement</li>
+              <li>Imaginative play</li>
+            </ul>
+          </article>
+          <article class="prog-card reveal" style="transition-delay:0.24s">
+            <div class="prog-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle class="a" cx="8" cy="8" r="3"/><circle class="a" cx="17" cy="9.5" r="2.4"/><path class="a" d="M3 20c0-3 2.2-5 5-5s5 2 5 5"/><path class="a" d="M14.5 19.5c.3-2.3 1.7-4 3.5-4 1.6 0 2.9 1.3 3.3 3.2"/><circle class="b" cx="12" cy="3.4" r="1.4"/></svg>
+            </div>
+            <h3>Social Development</h3>
+            <ul>
+              <li>Building friendships</li>
+              <li>Sharing and cooperation</li>
+              <li>Developing confidence</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Environment -->
+  <section id="environment" aria-labelledby="env-title">
+    <div class="wrap env-grid">
+      <div class="photo-frame reveal" role="img" aria-label="Illustration of an outdoor play area with a tree, sandpit and sunshine">
+        <div class="scene scene-2" aria-hidden="true">
+          <svg viewBox="0 0 400 340" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="340" fill="#dcebd4"/>
+            <circle cx="70" cy="66" r="40" fill="#f7d98c"/>
+            <path d="M330 300c0-60 14-96 20-118" stroke="#7a5c3a" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <circle cx="352" cy="150" r="52" fill="#5f8a5a"/>
+            <circle cx="312" cy="176" r="34" fill="#6d9a67"/>
+            <rect x="60" y="230" width="130" height="46" rx="20" fill="#e9c98a"/>
+            <circle cx="150" cy="258" r="10" fill="#c96f4a"/>
+            <circle cx="120" cy="246" r="8" fill="#8fae8b"/>
+            <path d="M30 300h340" stroke="#c8bfa4" stroke-width="6" stroke-linecap="round"/>
+            <rect x="200" y="196" width="70" height="10" rx="5" fill="#e9b44c"/>
+            <rect x="200" y="206" width="8" height="50" fill="#c8bfa4"/>
+            <rect x="262" y="206" width="8" height="50" fill="#c8bfa4"/>
+          </svg>
+        </div>
+        <span class="photo-caption">Room to play, explore and make discoveries</span>
+      </div>
+      <div class="env-copy reveal">
+        <span class="kicker">Our Environment</span>
+        <h2 class="section-title" id="env-title">A Space for Little Discoveries.</h2>
+        <p>Young children learn with their whole bodies and all their senses. That is why our environment is designed to be welcoming and engaging — spaces where curiosity is encouraged, routines feel safe, and every child has room to explore.</p>
+        <p>From quiet corners for stories to open space for play, each part of the day gives children the chance to discover something new.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery" aria-labelledby="gal-title">
+    <div class="gallery-band">
+      <div class="wrap">
+        <div class="reveal">
+          <span class="kicker">Gallery</span>
+          <h2 class="section-title" id="gal-title">Moments From Our Days.</h2>
+        </div>
+        <div class="gal-grid" id="galGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why parents choose us -->
+  <section id="why" aria-labelledby="why-title">
+    <div class="wrap">
+      <div class="reveal">
+        <span class="kicker">Why Parents Choose Us</span>
+        <h2 class="section-title" id="why-title">Small School, Big Heart.</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card reveal" style="transition-delay:0s">
+          <span class="why-num">01</span>
+          <h3>A welcoming learning environment</h3>
+          <p>Warm, friendly spaces where children feel at home from day one.</p>
+        </div>
+        <div class="why-card reveal" style="transition-delay:0.1s">
+          <span class="why-num">02</span>
+          <h3>Learning through play</h3>
+          <p>Play is how young children learn — and it is at the heart of every day.</p>
+        </div>
+        <div class="why-card reveal" style="transition-delay:0.2s">
+          <span class="why-num">03</span>
+          <h3>Opportunities to develop confidence</h3>
+          <p>Encouragement and gentle challenges help children believe in themselves.</p>
+        </div>
+        <div class="why-card reveal" style="transition-delay:0.3s">
+          <span class="why-num">04</span>
+          <h3>Encouraging social interaction</h3>
+          <p>Friendships, sharing and teamwork are part of everything we do.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" aria-labelledby="contact-title">
+    <div class="wrap contact-grid">
+      <div class="contact-card reveal">
+        <div>
+          <span class="kicker">Contact Us</span>
+          <h2 class="section-title" id="contact-title" style="margin-bottom:6px">Come and Say Hello.</h2>
+        </div>
+        <div class="contact-line">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="a" d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle class="a" cx="12" cy="10" r="2.6"/></svg></span>
+          <div><h3>Address</h3><p id="cAddress">Your Street Address, Your Town, South Africa</p></div>
+        </div>
+        <div class="contact-line">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="a" d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span>
+          <div><h3>Phone</h3><a id="cPhone" href="tel:+27000000000">000 000 0000</a></div>
+        </div>
+        <div class="contact-line">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="a" d="M4 6h16v12H4z"/><path class="a" d="m4 7 8 6 8-6"/></svg></span>
+          <div><h3>Email</h3><a id="cEmail" href="mailto:hello@safelightdaycare.co.za">hello@safelightdaycare.co.za</a></div>
+        </div>
+        <div class="contact-line">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="a" cx="12" cy="12" r="9"/><path class="a" d="M12 7v5l3 3"/></svg></span>
+          <div><h3>Operating Hours</h3><p id="cHours">Monday – Friday: 07:00 – 17:30</p><p id="cHoursNote" style="font-size:0.9rem;color:var(--ink-soft)">Please contact us about aftercare options.</p></div>
+        </div>
+        <div class="contact-cta">
+          <a class="btn wa-btn" id="waButton" href="https://wa.me/27000000000" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path class="wa" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.7.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4 0-.5.2-.8l.4-.5c.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.2-.2-.2-.4-.3z"/></svg>
+            Chat With Us on WhatsApp
+          </a>
+          <a class="btn btn-forest" id="callButton" href="tel:+27000000000">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+            Call the Creche
+          </a>
+        </div>
+      </div>
+      <div class="maps reveal" aria-label="Map showing the location of Safelight Day Care">
+        <div class="maps-empty" id="mapsEmpty">
+          <div>
+            <p style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:10px">Find us on the map</p>
+            <p style="font-size:0.95rem;margin-bottom:14px">A map location will appear here once the address is confirmed.</p>
+            <a id="mapsFallback" href="https://www.google.com/maps/search/?api=1&query=Safelight+Day+Care" target="_blank" rel="noopener">Open in Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <div style="display:flex;align-items:center;gap:10px">
+      <svg class="brand-leaf" style="width:24px;height:24px" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#e9b44c" d="M12 2C7 6 4 10 4 14a8 8 0 0 0 16 0c0-4-3-8-8-12z"/>
+      </svg>
+      <span class="wordmark">Safelight Day Care</span>
+    </div>
+    <small>A place to learn, play and grow.</small>
+  </div>
+</footer>
+
+<script>
+  /* ============================================================
+     EDIT ME — Update the school's details here.
+     These values fill the contact section and WhatsApp links.
+     ============================================================ */
+  var SCHOOL = {
+    name: "Safelight Day Care",
+    address: "Your Street Address, Your Town, South Africa",
+    phoneDisplay: "000 000 0000",
+    phoneLink: "+27000000000",
+    whatsapp: "27000000000", /* international format, no + or spaces */
+    email: "hello@safelightdaycare.co.za",
+    hours: "Monday – Friday: 07:00 – 17:30",
+    hoursNote: "Please contact us about aftercare options.",
+    mapsEmbed: "", /* paste a Google Maps embed URL here, e.g. "https://www.google.com/maps/embed?pb=..." */
+    mapsLink: "https://www.google.com/maps/search/?api=1&query=Safelight+Day+Care"
+  };
+
+  /* Gallery — replace each "type" with { src: "photo.jpg", alt: "..." } once real
+     photos are available. The labels stay the same. */
+  var GALLERY = [
+    { label: "Classroom activities", type: "scene-3", alt: "Placeholder for a photo of classroom activities" },
+    { label: "Outdoor play", type: "scene-4", alt: "Placeholder for a photo of outdoor play" },
+    { label: "Learning materials", type: "scene-5", alt: "Placeholder for a photo of learning materials" },
+    { label: "Creative activities", type: "scene-6", alt: "Placeholder for a photo of creative activities" },
+    { label: "Our school environment", type: "scene-7", alt: "Placeholder for a photo of the school environment" },
+    { label: "Story time", type: "scene-8", alt: "Placeholder for a photo of story time" }
+  ];
+
+  /* ---- Fill contact details ---- */
+  document.getElementById("cAddress").textContent = SCHOOL.address;
+  var phone = document.getElementById("cPhone");
+  phone.textContent = SCHOOL.phoneDisplay;
+  phone.href = "tel:" + SCHOOL.phoneLink;
+  var email = document.getElementById("cEmail");
+  email.textContent = SCHOOL.email;
+  email.href = "mailto:" + SCHOOL.email;
+  document.getElementById("cHours").textContent = SCHOOL.hours;
+  document.getElementById("cHoursNote").textContent = SCHOOL.hoursNote;
+
+  var waUrl = "https://wa.me/" + SCHOOL.whatsapp + "?text=" +
+    encodeURIComponent("Hello " + SCHOOL.name + ", I would like to book a visit.");
+  document.getElementById("waButton").href = waUrl;
+  document.getElementById("heroWhatsapp").href = waUrl;
+  document.getElementById("callButton").href = "tel:" + SCHOOL.phoneLink;
+
+  /* ---- Map ---- */
+  var mapsEmpty = document.getElementById("mapsEmpty");
+  document.getElementById("mapsFallback").href = SCHOOL.mapsLink;
+  if (SCHOOL.mapsEmbed) {
+    var iframe = document.createElement("iframe");
+    iframe.src = SCHOOL.mapsEmbed;
+    iframe.title = "Map showing the location of " + SCHOOL.name;
+    iframe.loading = "lazy";
+    iframe.referrerPolicy = "no-referrer-when-downgrade";
+    mapsEmpty.replaceWith(iframe);
+  }
+
+  /* ---- Gallery build ---- */
+  var grid = document.getElementById("galGrid");
+  GALLERY.forEach(function (item, i) {
+    var fig = document.createElement("figure");
+    fig.className = "gal-item reveal" + (i === 1 ? " tall" : "");
+    fig.style.transitionDelay = (i % 4) * 0.08 + "s";
+    fig.setAttribute("role", "img");
+    fig.setAttribute("aria-label", item.alt);
+    fig.innerHTML =
+      '<div class="scene ' + item.type + '" aria-hidden="true">' + sceneArt(i) + "</div>" +
+      '<figcaption class="gal-label">' + item.label + "</figcaption>";
+    grid.appendChild(fig);
+  });
+
+  /* Simple original line-art illustrations for the placeholders */
+  function sceneArt(i) {
+    var arts = [
+      '<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><rect width="200" height="200" fill="transparent"/><rect x="40" y="70" width="120" height="80" rx="10" fill="#fff" opacity="0.85"/><rect x="52" y="84" width="96" height="8" rx="4" fill="#8fae8b"/><rect x="52" y="100" width="70" height="8" rx="4" fill="#e0d6bd"/><rect x="52" y="116" width="40" height="12" rx="6" fill="#e9b44c"/><circle cx="150" cy="55" r="18" fill="#f7d98c"/></svg>',
+      '<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><circle cx="55" cy="55" r="24" fill="#f7d98c"/><path d="M20 165c25-18 50-18 75 0s50 18 75 0" stroke="#5f8a5a" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="140" cy="120" r="16" fill="#e9b44c"/><circle cx="95" cy="130" r="12" fill="#c96f4a"/></svg>',
+      '<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><rect x="45" y="55" width="50" height="66" rx="8" fill="#fff" opacity="0.9"/><rect x="105" y="75" width="50" height="66" rx="8" fill="#fff" opacity="0.7"/><circle cx="70" cy="80" r="10" fill="#e9b44c"/><rect x="58" y="98" width="24" height="6" rx="3" fill="#8fae8b"/><circle cx="130" cy="100" r="10" fill="#c96f4a"/></svg>',
+      '<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><circle cx="100" cy="100" r="42" fill="#fff" opacity="0.9"/><circle cx="100" cy="88" r="8" fill="#e9b44c"/><path d="M82 108c5 8 31 8 36 0" stroke="#8fae8b" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M100 30v18M170 100h-18M100 170v-18M30 100h18" stroke="#e9b44c" stroke-width="5" stroke-linecap="round"/></svg>',
+      '<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><path d="M150 165c0-50 10-80 14-98" stroke="#7a5c3a" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="166" cy="52" r="34" fill="#5f8a5a"/><circle cx="136" cy="70" r="22" fill="#6d9a67"/><rect x="30" y="130" width="80" height="34" rx="16" fill="#e9c98a"/></svg>',
+      '<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice"><path d="M55 60h90a10 10 0 0 1 10 10v60a10 10 0 0 1-10 10H75l-20 18V70a10 10 0 0 1 10-10z" fill="#fff" opacity="0.9"/><circle cx="85" cy="92" r="6" fill="#e9b44c"/><circle cx="115" cy="92" r="6" fill="#8fae8b"/><path d="M85 112c8 7 22 7 30 0" stroke="#c8bfa4" stroke-width="4" fill="none" stroke-linecap="round"/></svg>'
+    ];
+    return arts[i % arts.length];
+  }
+
+  /* ---- Loader ---- */
+  window.addEventListener("load", function () {
+    document.getElementById("loader").classList.add("done");
+  });
+  /* Safety: never trap the visitor behind the loader */
+  setTimeout(function () {
+    document.getElementById("loader").classList.add("done");
+  }, 2500);
+
+  /* ---- Header + nav ---- */
+  var header = document.getElementById("header");
+  var heroBg = document.getElementById("heroBg");
+  var sections = ["home", "about", "programmes", "gallery", "contact"];
+  var navLinks = document.querySelectorAll("nav.desktop a.nav-link");
+
+  function onScroll() {
+    header.classList.toggle("scrolled", window.scrollY > 40);
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced && window.scrollY < window.innerHeight) {
+      heroBg.style.transform = "translateY(" + window.scrollY * 0.28 + "px)";
+    }
+    var current = "home";
+    sections.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 140) current = id;
+    });
+    navLinks.forEach(function (link) {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + current);
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* ---- Mobile menu ---- */
+  var burger = document.getElementById("burger");
+  var mobileMenu = document.getElementById("mobileMenu");
+  function closeMenu() {
+    burger.classList.remove("open");
+    mobileMenu.classList.remove("open");
+    burger.setAttribute("aria-expanded", "false");
+    burger.setAttribute("aria-label", "Open menu");
+    document.body.style.overflow = "";
+  }
+  burger.addEventListener("click", function () {
+    var open = !mobileMenu.classList.contains("open");
+    burger.classList.toggle("open", open);
+    mobileMenu.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", String(open));
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.style.overflow = open ? "hidden" : "";
+  });
+  mobileMenu.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", closeMenu);
+  });
+
+  /* ---- Reveal on scroll ---- */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in");
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+</script>
+</body>
+</html>
+
